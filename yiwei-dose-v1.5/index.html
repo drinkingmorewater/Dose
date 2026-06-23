@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>一味 Dose v1.5 · 一剂音律，一刻治愈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- v1.5 字体革新：删除魏碑体/行书，主字体全局换为 ZCOOL XiaoWei（瘦金风格），重大标题用 Noto Serif SC -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<style>
+/* =========================================
+   v1.5 设计令牌
+   - 字体：瘦金体感 ZCOOL XiaoWei + 端庄 Noto Serif SC 900
+   - 英文/数字：Georgia / Cormorant Garamond fallback，保持原 serif 衬线观感
+   - 5 套国风主题保留
+========================================= */
+:root,body[data-theme="qingci"]{--bg-deep:#1a2a28;--bg-mid:#243634;--bg-soft:#2e4441;--primary:#6b9080;--primary-l:#a4c3b2;--primary-d:#4a6b5e;--accent:#d4a574;--accent-l:#e8c79a;--accent-d:#a87f4f;--paper:#f0e9d6;--paper-d:#e4d9bc;--rouge:#a13d2d;--rouge-d:#7a2d20;--ink:#2c2418;--text-paper:#3d342a;--text-m:#4d6661;--gold:#c9a35e;--jade-shadow:rgba(15,30,28,.45);}
+body[data-theme="yanzhi"]{--bg-deep:#2a1a1c;--bg-mid:#3a2426;--bg-soft:#4a3032;--primary:#b06a5e;--primary-l:#d49a8e;--primary-d:#8a4a40;--accent:#c9a35e;--accent-l:#e0bf80;--accent-d:#9a7a40;--paper:#f4ece0;--paper-d:#e8dcc8;--rouge:#a13d2d;--rouge-d:#7a2d20;--ink:#2c1818;--text-paper:#3d2a2a;--text-m:#664d4d;--gold:#c9a35e;--jade-shadow:rgba(50,20,22,.45);}
+body[data-theme="songyan"]{--bg-deep:#1c1a2e;--bg-mid:#26243a;--bg-soft:#322f4a;--primary:#6c5b9e;--primary-l:#9c8ec8;--primary-d:#4a3e74;--accent:#c9b06e;--accent-l:#e0c890;--accent-d:#9a8540;--paper:#ece8f0;--paper-d:#dcd6e4;--rouge:#a13d2d;--rouge-d:#7a2d20;--ink:#181626;--text-paper:#2a2438;--text-m:#4d4666;--gold:#c9b06e;--jade-shadow:rgba(20,18,40,.5);}
+body[data-theme="zhulu"]{--bg-deep:#162a1e;--bg-mid:#1f3a2a;--bg-soft:#2a4a36;--primary:#4a8a5e;--primary-l:#7ab088;--primary-d:#306440;--accent:#c9a857;--accent-l:#e0c688;--accent-d:#9a7e3a;--paper:#e8f0dc;--paper-d:#d4e0c4;--rouge:#a13d2d;--rouge-d:#7a2d20;--ink:#162018;--text-paper:#2a3a2a;--text-m:#446650;--gold:#c9a857;--jade-shadow:rgba(18,40,26,.45);}
+body[data-theme="daishan"]{--bg-deep:#1a242e;--bg-mid:#26323e;--bg-soft:#34424e;--primary:#5a8094;--primary-l:#86a8b8;--primary-d:#3e5e70;--accent:#d4a574;--accent-l:#e8c79a;--accent-d:#a87f4f;--paper:#e6ecf0;--paper-d:#d2dae0;--rouge:#a13d2d;--rouge-d:#7a2d20;--ink:#172026;--text-paper:#2a3844;--text-m:#4a5e6e;--gold:#d4a574;--jade-shadow:rgba(20,30,40,.45);}
+
+/* ★ v1.5 全局字体革新 */
+/* 中文：ZCOOL XiaoWei（瘦金体感、舒展工整） + Noto Serif SC（小标宋兜底）*/
+/* 英文 + 数字：保持衬线 serif 原观感 */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-feature-settings:"palt"}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'ZCOOL XiaoWei','Noto Serif SC','Songti SC','STSong',serif;
+  background:radial-gradient(ellipse at top,var(--bg-soft),var(--bg-deep) 70%);
+  color:var(--text-paper);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;transition:background .8s ease;
+  letter-spacing:1px;
+}
+/* 英文与数字保持 serif，不应用 ZCOOL XiaoWei */
+.en,.num,input[type="text"],input[type="password"],input[type="email"]{
+  font-family:'Cormorant Garamond','Georgia','Times New Roman',serif !important;
+}
+/* 端庄重标题专用 */
+.h-title{font-family:'Noto Serif SC',serif;font-weight:900;letter-spacing:8px}
+
+.deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.deco .mountain{position:absolute;top:6%;right:4%;width:380px;opacity:.08}
+.deco .bird{position:absolute;top:18%;left:12%;width:48px;opacity:.18;animation:flyBird 9s ease-in-out infinite alternate}
+@keyframes flyBird{0%{transform:translate(0,0)}100%{transform:translate(60vw,-30px)}}
+
+.brand-bar{position:fixed;top:0;left:0;right:0;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:50;font-family:'Noto Serif SC',serif;font-weight:700;letter-spacing:8px;color:var(--paper);opacity:.78;font-size:14px}
+.brand-bar .v-tag{font-family:'Cormorant Garamond',serif;letter-spacing:3px;font-size:12px;opacity:.7;font-style:italic}
+
+.marquee{position:fixed;top:42px;left:0;right:0;height:30px;overflow:hidden;z-index:49;pointer-events:none}
+.marquee-inner{display:flex;gap:80px;animation:scroll 50s linear infinite;white-space:nowrap;font-family:'ZCOOL XiaoWei',serif;color:var(--paper);opacity:.42;font-size:14px;letter-spacing:5px;padding-top:6px}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.phone-wrap{position:relative;z-index:10}
+.phone{width:390px;height:780px;background:var(--bg-mid);border-radius:54px;box-shadow:0 50px 100px -20px var(--jade-shadow),0 0 0 11px #0c1614,0 0 0 13px var(--primary-d);overflow:hidden;position:relative;transition:background .8s ease}
+.notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:118px;height:28px;background:#000;border-radius:18px;z-index:80}
+.status-bar{position:absolute;top:0;left:0;right:0;height:48px;padding:18px 32px 0;display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--paper);z-index:60;font-family:'Cormorant Garamond',serif}
+
+/* v1.5 改为 4 屏 */
+.screens{position:absolute;inset:0;display:flex;width:400%;transition:transform .7s cubic-bezier(.65,0,.35,1)}
+.screen{width:25%;height:100%;flex-shrink:0;position:relative;overflow:hidden;padding:62px 22px 78px;display:flex;flex-direction:column}
+
+/* ============================================
+   屏 0 · 开方（默认首页 · v1.5 AI 智能化升级）
+============================================ */
+.screen-deco{position:absolute;top:50px;right:20px;width:140px;opacity:.12;pointer-events:none}
+.greeting{font-family:'ZCOOL XiaoWei',serif;font-size:14px;letter-spacing:6px;color:var(--paper);opacity:0;text-align:center;margin-bottom:8px;animation:fadeUp .8s .3s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:.78;transform:translateY(0)}}
+.brush-line{clip-path:inset(0 100% 0 0);animation:brushWrite 1.4s cubic-bezier(.5,0,.2,1) forwards}
+@keyframes brushWrite{to{clip-path:inset(0 0 0 0)}}
+.kf-title{font-family:'Noto Serif SC',serif;font-weight:900;color:var(--paper);text-align:center;font-size:24px;letter-spacing:10px;line-height:1.5;margin-bottom:4px;opacity:0;animation:fadeUp .8s .8s forwards}
+.kf-title .l2{display:block;animation-delay:1.6s}
+.kf-sub{font-family:'Cormorant Garamond','Georgia',serif;color:var(--paper);font-size:12px;letter-spacing:4px;text-align:center;margin-bottom:14px;opacity:0;animation:fadeUp .8s 2.4s forwards;font-style:italic}
+.kf-input{width:100%;padding:13px 16px;background:rgba(240,233,214,.08);border:1px solid rgba(240,233,214,.2);border-radius:14px;color:var(--paper);font-family:'ZCOOL XiaoWei',serif;font-size:14px;letter-spacing:3px;outline:none;resize:none;height:72px;line-height:1.6;opacity:0;animation:fadeUp .8s 2.8s forwards;transition:.3s}
+.kf-input:focus{border-color:var(--accent);background:rgba(240,233,214,.12)}
+.kf-input::placeholder{color:rgba(240,233,214,.4);font-family:'ZCOOL XiaoWei',serif}
+.kf-hint{font-family:'ZCOOL XiaoWei',serif;font-size:11px;letter-spacing:3px;color:var(--paper);opacity:.45;margin-top:4px;text-align:right}
+.tag-title{font-family:'Noto Serif SC',serif;font-weight:700;color:var(--paper);font-size:13px;letter-spacing:6px;margin:14px 0 8px;opacity:0;animation:fadeUp .8s 3.2s forwards;display:flex;align-items:center;gap:8px}
+.tag-title::before{content:'';width:14px;height:2px;background:var(--accent)}
+.tags{display:flex;flex-wrap:wrap;gap:7px;opacity:0;animation:fadeUp .8s 3.4s forwards}
+.tag{padding:6px 12px;background:rgba(240,233,214,.08);border:1px solid rgba(240,233,214,.25);border-radius:14px;color:var(--paper);font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:3px;cursor:pointer;transition:.3s}
+.tag:hover,.tag.active{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.kf-btn{margin-top:14px;padding:14px;background:linear-gradient(180deg,var(--bg-soft),var(--ink));border:1px solid var(--accent);border-radius:18px;color:var(--paper);font-family:'Noto Serif SC',serif;font-weight:900;font-size:18px;letter-spacing:14px;cursor:pointer;box-shadow:0 8px 18px var(--jade-shadow);opacity:0;animation:fadeUp .8s 3.8s forwards;text-align:center;transition:.3s}
+.kf-btn:hover{background:linear-gradient(180deg,var(--primary),var(--bg-soft));transform:translateY(-1px)}
+.seal{position:absolute;bottom:96px;right:30px;width:62px;height:62px;border:2.5px solid var(--rouge);border-radius:10px;color:var(--rouge);font-family:'Noto Serif SC',serif;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;background:rgba(240,233,214,.05);opacity:0;animation:stampDown .5s cubic-bezier(.34,1.56,.64,1) 4.6s forwards;letter-spacing:1px}
+@keyframes stampDown{0%{opacity:0;transform:rotate(-30deg) scale(2)}60%{opacity:.92;transform:rotate(-6deg) scale(.85)}100%{opacity:.75;transform:rotate(-12deg) scale(1)}}
+
+/* AI 分析浮层（v1.5 新增） */
+.ai-overlay{position:absolute;inset:0;background:rgba(15,30,28,.92);backdrop-filter:blur(12px);z-index:100;display:none;flex-direction:column;padding:60px 22px 80px;overflow-y:auto}
+.ai-overlay.show{display:flex;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.ai-close{position:absolute;top:60px;right:20px;color:var(--paper);font-size:22px;cursor:pointer;opacity:.6;background:none;border:none;font-family:serif}
+.ai-close:hover{opacity:1;color:var(--accent)}
+.ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--paper);gap:18px}
+.ai-spinner{width:56px;height:56px;border:2.5px solid rgba(240,233,214,.18);border-top-color:var(--accent);border-radius:50%;animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-loading-text{font-family:'ZCOOL XiaoWei',serif;font-size:14px;letter-spacing:5px;opacity:.8}
+.ai-result{display:none;flex-direction:column;gap:14px;color:var(--paper)}
+.ai-result.show{display:flex;animation:fadeUp .6s ease}
+.ai-head{text-align:center;padding-bottom:10px;border-bottom:1px dashed rgba(212,165,116,.4)}
+.ai-head .h-title{font-size:22px;color:var(--paper)}
+.ai-head .sub{font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:4px;opacity:.65;margin-top:4px}
+.ai-block{background:rgba(240,233,214,.06);border-left:2px solid var(--accent);padding:10px 14px;border-radius:0 12px 12px 0}
+.ai-block .label{font-family:'Noto Serif SC',serif;font-weight:700;color:var(--accent);font-size:13px;letter-spacing:5px;margin-bottom:6px}
+.ai-block .content{font-family:'ZCOOL XiaoWei',serif;font-size:13px;letter-spacing:2px;line-height:1.85;color:var(--paper);opacity:.92}
+.ai-mode-switch{display:flex;gap:8px;margin-top:6px}
+.ai-mode-switch .mb{flex:1;padding:9px;text-align:center;background:rgba(240,233,214,.08);border:1px solid rgba(240,233,214,.2);border-radius:12px;color:var(--paper);font-family:'Noto Serif SC',serif;font-weight:700;font-size:13px;letter-spacing:4px;cursor:pointer;transition:.3s}
+.ai-mode-switch .mb.active{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.ai-candidate-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.ai-cand{padding:10px 12px;background:rgba(240,233,214,.06);border:1px solid rgba(240,233,214,.18);border-radius:12px;cursor:pointer;transition:.3s}
+.ai-cand:hover,.ai-cand.picked{border-color:var(--accent);background:rgba(212,165,116,.12)}
+.ai-cand .nm{font-family:'Noto Serif SC',serif;font-weight:700;font-size:14px;letter-spacing:4px;color:var(--paper)}
+.ai-cand .ds{font-family:'ZCOOL XiaoWei',serif;font-size:11px;letter-spacing:2px;opacity:.65;color:var(--paper);margin-top:2px}
+.ai-confirm{margin-top:8px;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent-d));border:none;border-radius:14px;color:var(--ink);font-family:'Noto Serif SC',serif;font-weight:900;font-size:15px;letter-spacing:8px;cursor:pointer;text-align:center}
+.ai-confirm:hover{transform:translateY(-1px);box-shadow:0 6px 14px var(--jade-shadow)}
+
+/* ============================================
+   屏 1 · 音方笺（v1.5 深度整合：处方 + 剧场 + 合音衍生）
+============================================ */
+.paper-bg{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(204,180,140,.05) 0,rgba(204,180,140,.05) 2px,transparent 2px,transparent 5px),linear-gradient(180deg,var(--paper),var(--paper-d));z-index:0}
+.bamboo{position:absolute;top:62px;bottom:90px;width:14px;background:linear-gradient(180deg,var(--accent-d),var(--accent),var(--accent-d));box-shadow:inset 0 0 6px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.18);border-radius:5px;z-index:2}
+.bamboo.l{left:14px}.bamboo.r{right:14px}
+.bamboo::before,.bamboo::after{content:'';position:absolute;left:-3px;width:20px;height:8px;background:var(--accent-d);border-radius:3px}
+.bamboo::before{top:-4px}.bamboo::after{bottom:-4px}
+.fang-wrap{position:relative;z-index:3;padding:0 18px;color:var(--text-paper);overflow-y:auto;flex:1;scrollbar-width:thin}
+.fang-wrap::-webkit-scrollbar{width:4px}
+.fang-wrap::-webkit-scrollbar-thumb{background:var(--accent-d);border-radius:2px}
+.fang-head{text-align:center;margin-bottom:10px;padding-top:4px}
+.fang-no{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:5px;color:var(--rouge);opacity:.7;font-style:italic}
+.fang-title{font-family:'Noto Serif SC',serif;font-weight:900;font-size:22px;letter-spacing:14px;margin:4px 0 2px;color:var(--text-paper)}
+.fang-sub{font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:5px;color:var(--text-m)}
+
+/* 三段式分区导航（处方/剧场/合音） */
+.fang-tabs{display:flex;gap:4px;margin:10px 0;background:rgba(212,165,116,.14);padding:3px;border-radius:10px}
+.fang-tabs .ft{flex:1;padding:6px 0;text-align:center;font-family:'Noto Serif SC',serif;font-weight:700;font-size:12px;letter-spacing:4px;color:var(--text-m);border-radius:8px;cursor:pointer;transition:.3s}
+.fang-tabs .ft.active{background:var(--paper);color:var(--rouge);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+.fang-section{display:none}
+.fang-section.active{display:block;animation:fadeUp .4s ease}
+
+/* 处方详情段 */
+.fang-row{display:flex;border-bottom:1px dashed var(--accent-d);padding:7px 0;font-size:12px}
+.fang-row .k{flex:0 0 56px;font-family:'Noto Serif SC',serif;font-weight:700;color:var(--rouge);letter-spacing:4px;font-size:13px}
+.fang-row .v{flex:1;font-family:'ZCOOL XiaoWei',serif;color:var(--text-paper);letter-spacing:1.5px;line-height:1.75}
+.fang-detail{margin-top:10px;padding:10px 12px;background:rgba(212,165,116,.12);border-left:2px solid var(--rouge);border-radius:0 8px 8px 0}
+.fang-detail .dt-label{font-family:'Noto Serif SC',serif;font-weight:700;color:var(--rouge);font-size:11px;letter-spacing:4px;margin-bottom:4px}
+.fang-detail .dt-content{font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:1.5px;line-height:1.85;color:var(--ink)}
+.poem{margin-top:10px;padding:8px 12px;background:rgba(212,165,116,.2);border-left:3px solid var(--rouge);border-radius:0 10px 10px 0;font-family:'ZCOOL XiaoWei',serif;font-size:13px;letter-spacing:3px;color:var(--ink);line-height:1.85}
+
+/* 剧场段（嵌入） */
+.theatre-inline{position:relative;height:340px;margin-top:6px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#243634,#1a2a28)}
+.ink-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(107,144,128,.35),transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(212,165,116,.22),transparent 55%);animation:inkFlow 10s ease-in-out infinite alternate}
+@keyframes inkFlow{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.1) translate(-10px,10px)}}
+.breath-ring{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;border:1.5px solid var(--primary-l);box-shadow:0 0 40px var(--primary-l),inset 0 0 40px var(--primary);animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(.85);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}
+.song-name{position:absolute;top:64%;left:50%;transform:translateX(-50%);font-family:'Noto Serif SC',serif;font-weight:700;color:var(--paper);font-size:18px;letter-spacing:8px;text-align:center;white-space:nowrap}
+.song-desc{position:absolute;top:72%;left:50%;transform:translateX(-50%);font-family:'ZCOOL XiaoWei',serif;color:var(--paper);opacity:.7;font-size:11px;letter-spacing:3px;white-space:nowrap}
+.spectrum{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);display:flex;gap:3px;align-items:flex-end;height:30px}
+.spectrum .bar{width:3px;background:linear-gradient(180deg,var(--primary-l),var(--primary));border-radius:2px;animation:specBar 1.2s ease-in-out infinite}
+@keyframes specBar{0%,100%{height:30%}50%{height:100%}}
+.theatre-ctrl{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+.theatre-ctrl .ct{width:36px;height:36px;border-radius:50%;background:rgba(240,233,214,.15);border:1px solid rgba(240,233,214,.3);color:var(--paper);font-family:serif;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.theatre-ctrl .play{width:44px;height:44px;background:radial-gradient(circle at 30% 30%,var(--rouge),var(--rouge-d));font-size:18px;border:none;box-shadow:0 4px 12px rgba(161,61,45,.4)}
+
+/* 合音衍生段（嵌入） */
+.heming-inline{margin-top:6px}
+.hm-tip{font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:2px;color:var(--text-m);line-height:1.7;margin-bottom:10px;padding:8px 10px;background:rgba(212,165,116,.1);border-radius:8px}
+.hm-tip b{color:var(--rouge);font-family:'Noto Serif SC',serif;font-weight:700}
+.derived-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.derived-card{position:relative;background:rgba(240,233,214,.5);border:1px solid rgba(212,165,116,.4);border-radius:10px;padding:8px 4px;text-align:center;cursor:pointer;transition:.3s}
+.derived-card:hover{transform:translateY(-2px);border-color:var(--rouge)}
+.derived-card.picked{background:var(--accent);border-color:var(--rouge)}
+.derived-card .emo{font-size:20px}
+.derived-card .nm{font-family:'Noto Serif SC',serif;font-weight:700;font-size:11px;letter-spacing:2px;margin-top:2px;color:var(--ink)}
+.derived-card .fr{font-family:'Cormorant Garamond',serif;font-size:9px;opacity:.7;margin-top:1px;color:var(--ink);font-style:italic}
+.derived-go{margin-top:10px;padding:10px;background:linear-gradient(135deg,var(--rouge),var(--rouge-d));color:#fff;border:none;border-radius:14px;font-family:'Noto Serif SC',serif;font-weight:900;font-size:13px;letter-spacing:6px;cursor:pointer;width:100%}
+.derived-result{margin-top:8px;padding:9px;background:rgba(212,165,116,.15);border:1px dashed var(--rouge);border-radius:10px;font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:2px;color:var(--ink);text-align:center;line-height:1.7;min-height:30px}
+
+.fang-seal{position:absolute;top:62px;right:30px;width:54px;height:54px;border:2.5px solid var(--rouge);border-radius:8px;color:var(--rouge);font-family:'Noto Serif SC',serif;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;background:rgba(240,233,214,.5);transform:rotate(8deg);z-index:5;letter-spacing:1px;text-align:center;line-height:1.3}
+
+/* ============================================
+   屏 2 · 合音工作台（完整 22 件乐器）
+============================================ */
+.heming{position:relative;height:100%;color:var(--paper);display:flex;flex-direction:column}
+.hm-head{text-align:center;margin-bottom:8px}
+.hm-title{font-family:'Noto Serif SC',serif;font-weight:900;font-size:22px;letter-spacing:14px;color:var(--paper)}
+.hm-sub{font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:4px;opacity:.7;margin-top:2px}
+.tabs{display:flex;gap:6px;margin-bottom:10px;justify-content:center}
+.tabs .tb{padding:5px 12px;background:rgba(240,233,214,.06);border:1px solid rgba(240,233,214,.18);border-radius:12px;color:var(--paper);font-family:'ZCOOL XiaoWei',serif;font-size:11px;letter-spacing:3px;cursor:pointer;transition:.3s}
+.tabs .tb.active{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.inst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;overflow-y:auto;flex:1;padding:2px}
+.inst-card{position:relative;background:rgba(240,233,214,.07);border:1px solid rgba(240,233,214,.15);border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;transition:.3s}
+.inst-card:hover{background:rgba(240,233,214,.13);border-color:var(--accent);transform:translateY(-2px)}
+.inst-card.picked{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.inst-card .emo{font-size:22px}
+.inst-card .nm{font-family:'Noto Serif SC',serif;font-weight:700;font-size:11px;letter-spacing:2px;margin-top:2px}
+.inst-card .fr{font-family:'Cormorant Garamond',serif;font-size:9px;opacity:.65;letter-spacing:1px;font-style:italic}
+.inst-card .preview{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:var(--rouge);color:#fff;font-size:10px;display:none;align-items:center;justify-content:center}
+.inst-card:hover .preview{display:flex}
+.hm-go{margin-top:8px;padding:11px;background:linear-gradient(135deg,var(--accent),var(--accent-d));border-radius:16px;color:var(--ink);font-family:'Noto Serif SC',serif;font-weight:900;font-size:15px;letter-spacing:8px;text-align:center;cursor:pointer;border:none}
+.hm-result{margin-top:8px;padding:10px;background:rgba(240,233,214,.08);border:1px dashed var(--accent);border-radius:12px;font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:3px;color:var(--paper);text-align:center;min-height:32px;line-height:1.6}
+
+/* ============================================
+   屏 3 · 我的（推荐 + 登录 合并 · v1.5）
+============================================ */
+.mine{display:flex;flex-direction:column;height:100%}
+.mine-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,165,116,.18),transparent 55%),linear-gradient(180deg,var(--bg-deep),var(--bg-soft));z-index:0}
+.mine-card{position:relative;z-index:2;background:rgba(240,233,214,.06);border:1px solid rgba(240,233,214,.15);border-radius:18px;padding:16px;color:var(--paper);margin-bottom:14px}
+.mine-card.guest{text-align:center;padding:24px 18px}
+.logo-seal{width:64px;height:64px;border:2.5px solid var(--rouge);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-weight:700;color:var(--rouge);font-size:22px;letter-spacing:0;transform:rotate(-6deg);margin:0 auto 14px;background:rgba(240,233,214,.06);box-shadow:0 4px 16px rgba(161,61,45,.25)}
+.mine-card.guest .h-title{font-size:22px;color:var(--paper);margin-bottom:4px}
+.mine-card.guest .sub{font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:4px;opacity:.7;margin-bottom:16px}
+.login-form{display:flex;flex-direction:column;gap:10px;text-align:left}
+.login-form label{font-family:'Noto Serif SC',serif;font-weight:700;font-size:11px;letter-spacing:4px;opacity:.7}
+.login-form input{padding:10px 14px;border:1px solid rgba(240,233,214,.25);background:rgba(240,233,214,.06);border-radius:12px;color:var(--paper);font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:2px;outline:none;transition:.3s}
+.login-form input:focus{border-color:var(--accent);background:rgba(240,233,214,.1)}
+.login-form input::placeholder{color:rgba(240,233,214,.4)}
+.login-btn{margin-top:8px;padding:12px;background:linear-gradient(135deg,var(--primary),var(--primary-d));border:none;border-radius:14px;color:var(--paper);font-family:'Noto Serif SC',serif;font-weight:900;font-size:16px;letter-spacing:10px;cursor:pointer;box-shadow:0 6px 16px var(--jade-shadow)}
+.login-alt{display:flex;justify-content:center;gap:18px;margin-top:10px;opacity:.7;font-size:11px;letter-spacing:2px;font-family:'ZCOOL XiaoWei',serif}
+.login-alt span{cursor:pointer}.login-alt span:hover{color:var(--accent)}
+.guest-link{margin-top:8px;font-size:11px;letter-spacing:3px;opacity:.55;cursor:pointer;font-family:'ZCOOL XiaoWei',serif;text-align:center;color:var(--paper)}
+.guest-link:hover{opacity:1;color:var(--accent)}
+
+.mine-card.user{display:flex;align-items:center;gap:12px}
+.mine-avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--rouge));display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-weight:900;color:#fff;font-size:20px}
+.mine-info{flex:1}
+.mine-info .nm{font-family:'Noto Serif SC',serif;font-weight:700;font-size:16px;letter-spacing:4px;color:var(--paper)}
+.mine-info .sl{font-family:'ZCOOL XiaoWei',serif;font-size:11px;letter-spacing:3px;opacity:.6;margin-top:2px}
+.mine-logout{font-family:'ZCOOL XiaoWei',serif;font-size:11px;letter-spacing:3px;color:var(--accent);cursor:pointer;padding:6px 10px;border:1px solid var(--accent);border-radius:10px;background:transparent}
+
+.mine-scroll{flex:1;overflow-y:auto;position:relative;z-index:2;padding-bottom:8px}
+.section-title{font-family:'Noto Serif SC',serif;font-weight:700;color:var(--paper);font-size:14px;letter-spacing:6px;margin:6px 0 10px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';width:14px;height:2px;background:var(--accent)}
+.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.rec-card{background:rgba(240,233,214,.08);border:1px solid rgba(240,233,214,.15);border-radius:14px;padding:10px;cursor:pointer;transition:.3s;position:relative}
+.rec-card:hover{transform:translateY(-2px);background:rgba(240,233,214,.13);border-color:var(--accent)}
+.rec-emoji{font-size:22px;margin-bottom:4px}
+.rec-name{font-family:'Noto Serif SC',serif;font-weight:700;color:var(--paper);font-size:13px;letter-spacing:3px}
+.rec-from{font-family:'Cormorant Garamond',serif;color:var(--paper);opacity:.6;font-size:10px;letter-spacing:1px;margin-top:2px;font-style:italic}
+.rec-mood{position:absolute;top:8px;right:8px;font-size:9px;padding:1px 6px;background:var(--rouge);color:#fff;border-radius:8px;letter-spacing:1px;font-family:'ZCOOL XiaoWei',serif}
+.daily-tip{margin-top:6px;padding:10px 14px;border-left:2px solid var(--rouge);background:rgba(240,233,214,.06);border-radius:0 12px 12px 0;font-family:'ZCOOL XiaoWei',serif;font-size:12px;letter-spacing:3px;color:var(--paper);opacity:.85;line-height:1.7}
+
+/* 底部全局导航（v1.5 精简为 4 项） */
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:62px;background:linear-gradient(180deg,rgba(20,30,28,.78),rgba(12,22,20,.95));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(240,233,214,.12);display:flex;align-items:center;justify-content:space-around;z-index:70;padding-bottom:env(safe-area-inset-bottom)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--paper);opacity:.55;transition:.3s;padding:6px 0}
+.tab-item.active{opacity:1;color:var(--accent)}
+.tab-item:hover{opacity:.9}
+.tab-icon{font-size:18px;line-height:1}
+.tab-label{font-family:'Noto Serif SC',serif;font-weight:700;font-size:10px;letter-spacing:3px;margin-top:3px}
+.tab-item.active .tab-icon{transform:scale(1.1);filter:drop-shadow(0 0 6px var(--accent))}
+
+.theme-switch{position:fixed;left:28px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:30}
+.tdot{width:19px;height:19px;border-radius:50%;cursor:pointer;border:2px solid rgba(240,233,214,.35);transition:.3s;position:relative}
+.tdot:hover{transform:scale(1.15)}
+.tdot.active{border-color:var(--paper);box-shadow:0 0 0 3px var(--accent)}
+.tdot.qingci{background:linear-gradient(135deg,#6b9080,#a4c3b2)}
+.tdot.yanzhi{background:linear-gradient(135deg,#b06a5e,#d49a8e)}
+.tdot.songyan{background:linear-gradient(135deg,#6c5b9e,#9c8ec8)}
+.tdot.zhulu{background:linear-gradient(135deg,#4a8a5e,#7ab088)}
+.tdot.daishan{background:linear-gradient(135deg,#5a8094,#86a8b8)}
+.tdot::after{content:attr(data-name);position:absolute;left:28px;top:50%;transform:translateY(-50%);font-family:'ZCOOL XiaoWei',serif;color:var(--paper);font-size:12px;letter-spacing:3px;opacity:0;transition:.3s;white-space:nowrap}
+.tdot:hover::after{opacity:.8}
+.quote{position:fixed;right:50px;top:50%;transform:translateY(-50%);max-width:200px;color:var(--paper);opacity:.65;font-family:'ZCOOL XiaoWei',serif;font-size:15px;letter-spacing:7px;line-height:2.2;text-align:right;border-right:1.5px solid var(--accent);padding-right:18px;z-index:30}
+.audio-status{position:absolute;top:54px;left:50%;transform:translateX(-50%);padding:4px 10px;background:rgba(0,0,0,.5);border:1px solid rgba(240,233,214,.3);border-radius:10px;color:var(--paper);font-family:'ZCOOL XiaoWei',serif;font-size:10px;letter-spacing:2px;opacity:0;transition:.4s;z-index:65;pointer-events:none}
+.audio-status.show{opacity:.85}
+@media (max-width:768px){.deco,.brand-bar,.quote{display:none}.marquee{top:0}.phone{width:100vw;height:100vh;border-radius:0;box-shadow:none}.notch{display:none}body{align-items:stretch}.theme-switch{left:auto;right:14px;top:60px;transform:none;flex-direction:row}}
+</style>
+</head>
+<body data-theme="qingci">
+<div class="deco">
+  <svg class="mountain" viewBox="0 0 400 200"><path d="M0,180 L60,120 L120,150 L180,80 L240,130 L300,60 L360,110 L400,90 L400,200 L0,200 Z" fill="#f0e9d6"/></svg>
+  <svg class="bird" viewBox="0 0 60 30"><path d="M5,20 Q15,5 25,20 Q35,5 45,20 Q50,18 55,20" stroke="#f0e9d6" stroke-width="2" fill="none"/></svg>
+</div>
+<div class="brand-bar"><span>一 味 · DOSE</span><span class="v-tag">v 1.5 · A dose of sound</span></div>
+<div class="marquee"><div class="marquee-inner">
+  <span>你今日，过得怎样？</span><span>愿你听见的，皆是温柔</span><span>一花一世界，一音一菩提</span><span>心若安处，便是归途</span><span>风过竹林，自有清音</span><span>岁月不语，惟以乐答之</span><span>今夜，让一剂音方陪你入梦</span><span>听山听水，听自己</span><span>不必勉强，慢一点也无妨</span><span>一剂音律，一刻治愈</span>
+  <span>你今日，过得怎样？</span><span>愿你听见的，皆是温柔</span><span>一花一世界，一音一菩提</span><span>心若安处，便是归途</span><span>风过竹林，自有清音</span><span>岁月不语，惟以乐答之</span><span>今夜，让一剂音方陪你入梦</span><span>听山听水，听自己</span><span>不必勉强，慢一点也无妨</span><span>一剂音律，一刻治愈</span>
+</div></div>
+<div class="theme-switch">
+  <div class="tdot qingci active" data-theme="qingci" data-name="青瓷"></div>
+  <div class="tdot yanzhi" data-theme="yanzhi" data-name="胭脂"></div>
+  <div class="tdot songyan" data-theme="songyan" data-name="松烟"></div>
+  <div class="tdot zhulu" data-theme="zhulu" data-name="竹露"></div>
+  <div class="tdot daishan" data-theme="daishan" data-name="黛山"></div>
+</div>
+<div class="quote">一剂音律<br>一刻治愈<br>跨越山海<br>聆听自己</div>
+
+<div class="phone-wrap"><div class="phone">
+  <div class="notch"></div>
+  <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+  <div class="audio-status" id="audioStatus">合成音律播放中</div>
+
+  <div class="screens" id="screens">
+
+    <!-- ============ 屏 0 · 开方（默认首页 · v1.5 AI 智能化） ============ -->
+    <div class="screen" data-tab="kefang">
+      <svg class="screen-deco" viewBox="0 0 200 100"><path d="M0,80 L40,40 L80,60 L120,20 L160,50 L200,30 L200,100 L0,100 Z" fill="#f0e9d6"/></svg>
+      <div class="greeting">你今日，过得怎样？</div>
+      <div class="kf-title"><span class="brush-line h-title">今 日 ，</span><span class="brush-line l2 h-title">给 你 开 一 剂 方</span></div>
+      <div class="kf-sub">A DOSE OF SOUND FOR YOU</div>
+      <textarea class="kf-input" id="moodInput" placeholder="且用一句话，写下此刻心境……&#10;譬如：案牍劳形，夜不能寐，胸中似有块垒"></textarea>
+      <div class="kf-hint">AI 智能识别 · 双模式开方</div>
+      <div class="tag-title">或 · 速选今日心绪</div>
+      <div class="tags">
+        <span class="tag" onclick="pickTag(this,'焦虑难安')">焦虑难安</span>
+        <span class="tag" onclick="pickTag(this,'失眠多梦')">失眠多梦</span>
+        <span class="tag" onclick="pickTag(this,'胸有块垒')">胸有块垒</span>
+        <span class="tag" onclick="pickTag(this,'求治愈')">求治愈</span>
+        <span class="tag" onclick="pickTag(this,'愿乘风')">愿乘风</span>
+        <span class="tag" onclick="pickTag(this,'颈椎僵硬')">颈椎僵硬</span>
+        <span class="tag" onclick="pickTag(this,'孤独清冷')">孤独清冷</span>
+        <span class="tag" onclick="pickTag(this,'怅然若失')">怅然若失</span>
+      </div>
+      <button class="kf-btn" onclick="aiAnalyze()">抓 药</button>
+      <div class="seal">一味<br>DOSE</div>
+
+      <!-- v1.5 新增：AI 智能分析浮层 -->
+      <div class="ai-overlay" id="aiOverlay">
+        <button class="ai-close" onclick="closeAi()">✕</button>
+        <div class="ai-loading" id="aiLoading">
+          <div class="ai-spinner"></div>
+          <div class="ai-loading-text" id="aiLoadingTxt">正在为你把脉…</div>
+        </div>
+        <div class="ai-result" id="aiResult">
+          <div class="ai-head">
+            <div class="h-title">AI 智 能 把 脉</div>
+            <div class="sub">Damia AI · 情绪洞察 · 音律开方</div>
+          </div>
+          <div class="ai-block">
+            <div class="label">情 绪 拆 解</div>
+            <div class="content" id="aiEmotion"></div>
+          </div>
+          <div class="ai-block">
+            <div class="label">成 因 推 演</div>
+            <div class="content" id="aiCause"></div>
+          </div>
+          <div class="ai-block">
+            <div class="label">音 律 建 议</div>
+            <div class="content" id="aiAdvice"></div>
+          </div>
+          <div class="ai-mode-switch">
+            <div class="mb active" id="modeAuto" onclick="switchMode('auto')">智 能 推 送</div>
+            <div class="mb" id="modeManual" onclick="switchMode('manual')">自 主 选 方</div>
+          </div>
+          <div id="modeAutoPanel">
+            <div class="ai-block" style="border-left-color:var(--rouge)">
+              <div class="label" style="color:var(--rouge)">推 荐 音 方</div>
+              <div class="content" id="aiAutoFang"></div>
+            </div>
+          </div>
+          <div id="modeManualPanel" style="display:none">
+            <div class="ai-candidate-list" id="aiCandList"></div>
+          </div>
+          <button class="ai-confirm" onclick="confirmFang()">取  方  &gt;&gt;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 屏 1 · 音方笺（深度整合 · 处方/剧场/合音） ============ -->
+    <div class="screen" data-tab="fang">
+      <div class="paper-bg"></div>
+      <div class="bamboo l"></div><div class="bamboo r"></div>
+      <div class="fang-seal">一味<br>已开方</div>
+      <div class="fang-wrap">
+        <div class="fang-head">
+          <div class="fang-no">№ &nbsp; 壹  零  陆</div>
+          <div class="fang-title">音 方 笺</div>
+          <div class="fang-sub" id="fangSub">徵音入心 · 安神方</div>
+        </div>
+
+        <!-- 三段切换 -->
+        <div class="fang-tabs">
+          <div class="ft active" data-sec="detail" onclick="switchFang(this,'detail')">处 方</div>
+          <div class="ft" data-sec="theatre" onclick="switchFang(this,'theatre')">剧 场</div>
+          <div class="ft" data-sec="heming" onclick="switchFang(this,'heming')">合 音</div>
+        </div>
+
+        <!-- 段 1：处方详情（v1.5 内容大幅扩容） -->
+        <div class="fang-section active" data-sec="detail">
+          <div class="fang-row"><div class="k">脉 象</div><div class="v" id="fangPulse">案牍劳形，心绪如麻</div></div>
+          <div class="fang-row"><div class="k">主 药</div><div class="v" id="fangMain">古琴《云水禅心》七钱 · 徵音入心</div></div>
+          <div class="fang-row"><div class="k">辅 药</div><div class="v" id="fangAux">蒙古呼麦《苍穹》三钱 · 风铃一缕</div></div>
+          <div class="fang-row"><div class="k">服 法</div><div class="v" id="fangUsage">戌时 19-21 时 · 闭目静坐 · 七息一循</div></div>
+
+          <div class="fang-detail">
+            <div class="dt-label">脉 象 详 解</div>
+            <div class="dt-content" id="fangPulseDetail">
+              脉沉而细，思虑过重之相也。日间案牍劳形，神倦而不能眠；夜半辗转，心若浮萍。中医谓之"心脾两虚"，宜以柔缓徵音入心，安神定志。
+            </div>
+          </div>
+          <div class="fang-detail">
+            <div class="dt-label">药 性 释 义</div>
+            <div class="dt-content" id="fangHerbDetail">
+              <b>主药</b>：古琴属"丝"，七弦清越，徵音应心。《云水禅心》以散音起势，缓缓推进，如云气舒卷，最能化解郁结。<br>
+              <b>辅药</b>：蒙古呼麦低音泛响，与古琴清音相济，营造"天地共鸣"之境；末尾风铃一缕，收束清明，引人入梦。
+            </div>
+          </div>
+          <div class="fang-detail">
+            <div class="dt-label">服 法 详 解</div>
+            <div class="dt-content" id="fangUsageDetail">
+              戌时心经当令，宜静坐或半卧，关灯燃一缕沉香，闭目深呼吸——吸气四息，屏气一息，呼气七息，是为一循。如此七循，约七分钟，可入半睡眠态，让音律自然落入潜意识。
+            </div>
+          </div>
+          <div class="poem" id="fangPoem">
+            心若安处，便是归途。<br>
+            愿这一剂音律，化作清风入梦。
+          </div>
+        </div>
+
+        <!-- 段 2：剧场（嵌入） -->
+        <div class="fang-section" data-sec="theatre">
+          <div class="theatre-inline">
+            <div class="ink-bg"></div>
+            <div class="breath-ring"></div>
+            <div class="song-name" id="theatreSong">云 水 禅 心</div>
+            <div class="song-desc" id="theatreDesc">古琴 · 徵音入心 · 安神方</div>
+            <div class="spectrum" id="spectrum"></div>
+            <div class="theatre-ctrl">
+              <button class="ct" onclick="prevTrack()">◀</button>
+              <button class="ct play" onclick="playMain()">▶</button>
+              <button class="ct" onclick="nextTrack()">▶</button>
+            </div>
+          </div>
+          <div class="fang-detail" style="margin-top:10px">
+            <div class="dt-label">音 之 来 历</div>
+            <div class="dt-content" id="songOrigin">
+              《云水禅心》原曲为古筝独奏，本曲以古琴重新演绎，去其华丽，留其澄澈。配以蒙古呼麦低音衬底，仿佛立于山顶，远眺云水流转，万象俱寂。
+            </div>
+          </div>
+        </div>
+
+        <!-- 段 3：合音衍生（嵌入） -->
+        <div class="fang-section" data-sec="heming">
+          <div class="hm-tip">
+            ✦ 在主方基础上，自选 <b>1-3 件衍生乐器</b>，AI 将为你即兴合鸣，生成专属变奏。
+          </div>
+          <div class="derived-grid" id="derivedGrid">
+            <!-- 由 JS 渲染：6 件与当前主方相宜的乐器 -->
+          </div>
+          <button class="derived-go" onclick="composeDerived()">为 我 即 兴 合 鸣</button>
+          <div class="derived-result" id="derivedResult">已选 0 件 · 任选 1-3 件即可合鸣</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ 屏 2 · 合音工作台（完整 22 件） ============ -->
+    <div class="screen" data-tab="heming">
+      <div class="heming">
+        <div class="hm-head">
+          <div class="hm-title">合 音</div>
+          <div class="hm-sub">22 件世界乐器 · AI 跨文化编曲工作台</div>
+        </div>
+        <div class="tabs">
+          <span class="tb active" data-cat="all" onclick="filterCat(this,'all')">全部</span>
+          <span class="tb" data-cat="cn" onclick="filterCat(this,'cn')">中华</span>
+          <span class="tb" data-cat="asia" onclick="filterCat(this,'asia')">亚洲</span>
+          <span class="tb" data-cat="world" onclick="filterCat(this,'world')">世界</span>
+          <span class="tb" data-cat="nature" onclick="filterCat(this,'nature')">自然</span>
+        </div>
+        <div class="inst-grid" id="instGrid"></div>
+        <button class="hm-go" onclick="composeMusic()">生 成 专 属 音 轨</button>
+        <div class="hm-result" id="hmResult">已选 0 件 · 任选 2-3 件即可合鸣</div>
+      </div>
+    </div>
+
+    <!-- ============ 屏 3 · 我的（推荐 + 登录 合并） ============ -->
+    <div class="screen" data-tab="mine">
+      <div class="mine-bg"></div>
+      <div class="mine" style="position:relative;z-index:2">
+        <!-- 用户卡（未登录显示登录卡，已登录显示用户信息） -->
+        <div id="mineCardArea"></div>
+
+        <div class="mine-scroll">
+          <div class="section-title">为 你 今 日 精 选</div>
+          <div class="rec-grid">
+            <div class="rec-card" onclick="quickPlay('gz_yunshui','云水禅心','古琴 · 徵音入心 · 安神方')"><div class="rec-mood">安神</div><div class="rec-emoji">🎋</div><div class="rec-name">云水禅心</div><div class="rec-from">古琴 · 中国</div></div>
+            <div class="rec-card" onclick="quickPlay('ts_huanghun','晨拉格','西塔琴 · 商音入肺 · 舒筋方')"><div class="rec-mood">舒筋</div><div class="rec-emoji">🪕</div><div class="rec-name">晨拉格</div><div class="rec-from">西塔琴 · 印度</div></div>
+            <div class="rec-card" onclick="quickPlay('ks_song','颂钵之鸣','颂钵 · 羽音入肾 · 入梦方')"><div class="rec-mood">入梦</div><div class="rec-emoji">🪘</div><div class="rec-name">颂钵之鸣</div><div class="rec-from">颂钵 · 藏地</div></div>
+            <div class="rec-card" onclick="quickPlay('kl_yulin','雨林清晨','卡林巴 · 宫音入脾 · 暖心方')"><div class="rec-mood">暖心</div><div class="rec-emoji">🎶</div><div class="rec-name">雨林清晨</div><div class="rec-from">卡林巴 · 非洲</div></div>
+          </div>
+          <div class="daily-tip">
+            <b style="font-family:'Noto Serif SC';font-weight:700;color:var(--accent)">今 日 时 辰 贴 士</b><br>
+            戌时（19-21 点）心经当令，宜听徵音。一剂古琴入耳，可解一日案牍之劳；若辅以颂钵衬底，则更易入梦。
+          </div>
+          <div class="section-title" style="margin-top:14px">主 题 切 换</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <span class="tag" onclick="setTheme('qingci')">青瓷</span>
+            <span class="tag" onclick="setTheme('yanzhi')">胭脂</span>
+            <span class="tag" onclick="setTheme('songyan')">松烟</span>
+            <span class="tag" onclick="setTheme('zhulu')">竹露</span>
+            <span class="tag" onclick="setTheme('daishan')">黛山</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- v1.5 底部导航（精简为 4 项） -->
+  <div class="tabbar" id="tabbar">
+    <div class="tab-item active" data-idx="0" onclick="goto(0)"><div class="tab-icon">📜</div><div class="tab-label">开 方</div></div>
+    <div class="tab-item" data-idx="1" onclick="goto(1)"><div class="tab-icon">🎴</div><div class="tab-label">音方笺</div></div>
+    <div class="tab-item" data-idx="2" onclick="goto(2)"><div class="tab-icon">🎼</div><div class="tab-label">合 音</div></div>
+    <div class="tab-item" data-idx="3" onclick="goto(3)"><div class="tab-icon">🏮</div><div class="tab-label">我 的</div></div>
+  </div>
+
+</div></div>
+
+<script>
+/* ============ 数据库 ============ */
+const INSTRUMENTS=[
+{id:'guzheng',cat:'cn',emoji:'🎋',name:'古筝',from:'中国',freq:330,type:'pluck'},
+{id:'guqin',cat:'cn',emoji:'🪕',name:'古琴',from:'中国',freq:262,type:'pluck'},
+{id:'pipa',cat:'cn',emoji:'🪗',name:'琵琶',from:'中国',freq:294,type:'pluck'},
+{id:'xiao',cat:'cn',emoji:'🎐',name:'洞箫',from:'中国',freq:247,type:'wind'},
+{id:'erhu',cat:'cn',emoji:'🎻',name:'二胡',from:'中国',freq:294,type:'bow'},
+{id:'bianzhong',cat:'cn',emoji:'🔔',name:'编钟',from:'中国',freq:220,type:'bell'},
+{id:'shakuhachi',cat:'asia',emoji:'🎵',name:'尺八',from:'日本',freq:261,type:'wind'},
+{id:'koto',cat:'asia',emoji:'🎶',name:'十三弦',from:'日本',freq:293,type:'pluck'},
+{id:'sitar',cat:'asia',emoji:'🪕',name:'西塔琴',from:'印度',freq:261,type:'pluck'},
+{id:'tabula',cat:'asia',emoji:'🥁',name:'塔布拉',from:'印度',freq:165,type:'drum'},
+{id:'bowl',cat:'asia',emoji:'🍵',name:'颂钵',from:'藏地',freq:174,type:'bowl'},
+{id:'humai',cat:'asia',emoji:'🌬️',name:'呼麦',from:'蒙古',freq:130,type:'drone'},
+{id:'morinhuur',cat:'asia',emoji:'🎻',name:'马头琴',from:'蒙古',freq:220,type:'bow'},
+{id:'kalimba',cat:'world',emoji:'🎹',name:'卡林巴',from:'非洲',freq:392,type:'bell'},
+{id:'djembe',cat:'world',emoji:'🪘',name:'非洲鼓',from:'西非',freq:110,type:'drum'},
+{id:'bagpipe',cat:'world',emoji:'🎺',name:'风笛',from:'爱尔兰',freq:233,type:'wind'},
+{id:'panpipe',cat:'world',emoji:'🪈',name:'排箫',from:'安第斯',freq:349,type:'wind'},
+{id:'didgeridoo',cat:'world',emoji:'🎷',name:'迪吉里杜',from:'澳洲',freq:73,type:'drone'},
+{id:'rain',cat:'nature',emoji:'🌧️',name:'雨声',from:'自然',freq:0,type:'noise'},
+{id:'stream',cat:'nature',emoji:'💧',name:'溪流',from:'自然',freq:0,type:'stream'},
+{id:'wind',cat:'nature',emoji:'🍃',name:'风吟',from:'自然',freq:0,type:'whoosh'},
+{id:'bell',cat:'nature',emoji:'🎐',name:'风铃',from:'自然',freq:880,type:'chime'}
+];
+
+const PRESCRIPTIONS={
+'焦虑难安':{sub:'角音入肝 · 疏郁方',main:'古筝《云水禅心》七钱 · 角音入肝',aux:'排箫《晨》三钱 · 风吟一缕',usage:'卯时 5-7 时 · 缓步庭间 · 五息一循',
+  pulseDetail:'脉弦而紧，肝气郁结之相。日间事多而急，肝失疏泄，气血不畅。宜以角音舒肝，配合晨间清气，疏导郁结。',
+  herbDetail:'<b>主药</b>：古筝音色清亮舒展，角调上行，最能疏肝理气，化解胸中烦闷。<br><b>辅药</b>：安第斯排箫《晨》清越如风，配合自然风吟，仿佛漫步竹林溪畔，万念皆消。',
+  usageDetail:'卯时肝胆当令，宜起身缓步，开窗纳气。播放音方时配合呼吸——吸气五息，呼气五息，缓行三十步为一循。',
+  poem:'风过竹林，自有清音。<br>愿这一剂音律，吹散心头万千结。',
+  deriveInstruments:['xiao','panpipe','wind','bell','erhu','stream'],
+  songId:'gz_yunshui',songName:'云水禅心',songMain:'guzheng',
+  origin:'《云水禅心》原曲以古筝表现禅意空灵，本版加入安第斯排箫，使东方郁结遇见西方清风，相互调和。'
+},
+'失眠多梦':{sub:'徵音入心 · 安神方',main:'古琴《平沙落雁》七钱 · 徵音入心',aux:'颂钵《颂钵之鸣》三钱 · 风铃一缕',usage:'戌时 19-21 时 · 闭目静坐 · 七息一循',
+  pulseDetail:'脉沉而细，思虑过重之相。日间案牍劳形，神倦而不能眠；夜半辗转，心若浮萍。中医谓之"心脾两虚"，宜以柔缓徵音入心，安神定志。',
+  herbDetail:'<b>主药</b>：古琴属"丝"，七弦清越，徵音应心。《平沙落雁》以散音起势，缓缓推进，如鸿雁掠水，最能化解郁结。<br><b>辅药</b>：藏式颂钵泛音绵长，与古琴清音相济，营造"天地共鸣"之境；末尾风铃一缕，收束清明，引人入梦。',
+  usageDetail:'戌时心经当令，宜静坐或半卧，关灯燃一缕沉香，闭目深呼吸——吸气四息，屏气一息，呼气七息，是为一循。如此七循，约七分钟，可入半睡眠态，让音律自然落入潜意识。',
+  poem:'心若安处，便是归途。<br>愿这一剂音律，化作清风入梦。',
+  deriveInstruments:['guqin','bowl','xiao','bell','rain','humai'],
+  songId:'gq_pingsha',songName:'平沙落雁',songMain:'guqin',
+  origin:'《平沙落雁》乃古琴名曲，传为唐人陈子昂所作，描绘鸿雁掠过沙滩之景，意境平和。配以藏式颂钵，更添"夜深沉而万象息"之感。'
+},
+'胸有块垒':{sub:'商音入肺 · 舒筋方',main:'西塔琴《晨拉格》七钱 · 商音入肺',aux:'颂钵《颂钵之鸣》三钱 · 雨声一缕',usage:'酉时 17-19 时 · 平躺深呼吸 · 九息一循',
+  pulseDetail:'脉涩而沉，气滞于胸，多因情志不舒、久坐少动。宜以商音清肺，疏导胸中郁气。',
+  herbDetail:'<b>主药</b>：印度西塔琴拉格 Bhairav，晨间调式，悠远绵长，最能开胸理气。<br><b>辅药</b>：藏式颂钵深沉如渊，配以南国雨声，洗涤心肺尘垢。',
+  usageDetail:'酉时肾经当令，宜平躺床榻，双手轻置胸腹，随呼吸起伏。吸气九息使胸腔扩张，呼气九息使胸腔归位。',
+  poem:'胸中块垒，皆可化为清音。<br>一吐一纳，天地宽阔。',
+  deriveInstruments:['sitar','bowl','rain','xiao','panpipe','bell'],
+  songId:'ts_huanghun',songName:'晨拉格',songMain:'sitar',
+  origin:'《晨拉格》取材印度古典 Bhairav 调式，原为晨间冥想曲。本版加入颂钵衬底，更宜午后疏郁。'
+},
+'求治愈':{sub:'宫音入脾 · 暖心方',main:'卡林巴《雨林清晨》七钱 · 宫音入脾',aux:'非洲鼓《火焰之舞》三钱 · 风铃一缕',usage:'巳时 9-11 时 · 漫步阳光下 · 六息一循',
+  pulseDetail:'脉缓而和，神疲未尽。多为长期消耗、情感低迷之相。宜以温暖宫音入脾，重建身心节律。',
+  herbDetail:'<b>主药</b>：非洲卡林巴音色温润，宛如雨滴叩叶，最宜安抚疲惫心灵。<br><b>辅药</b>：非洲鼓低音律动，唤醒身体生命力；风铃一缕，点亮一日希望。',
+  usageDetail:'巳时脾经当令，宜在日光下缓步，让自然之光配合音律，从内到外重建温度。六息为一循，约六分钟可见效。',
+  poem:'不必勉强，慢一点也无妨。<br>愿这一剂音律，温柔包裹疲惫的你。',
+  deriveInstruments:['kalimba','djembe','bell','rain','panpipe','stream'],
+  songId:'kl_yulin',songName:'雨林清晨',songMain:'kalimba',
+  origin:'《雨林清晨》以非洲卡林巴模拟雨林晨光，加入鸟鸣与风铃，构成温柔的疗愈氛围。'
+},
+'愿乘风':{sub:'角音入肝 · 振作方',main:'非洲鼓《火焰之舞》七钱 · 角音入肝',aux:'桑巴鼓《嘉年华》三钱 · 风笛一缕',usage:'辰时 7-9 时 · 起身舒展 · 三息一循',
+  pulseDetail:'脉浮而有力，蓄势待发之相。宜以振奋角音激活气血，迎接新的一天。',
+  herbDetail:'<b>主药</b>：非洲鼓节奏强劲，如心跳如鼓点，唤醒沉睡的力量。<br><b>辅药</b>：巴西桑巴鼓与爱尔兰风笛跨文化共振，象征跨越山海的勇气。',
+  usageDetail:'辰时胃经当令，是一日精力最盛之时。配合音律做伸展操，三息一循，七循后元气满盈。',
+  poem:'愿乘风而起，扶摇直上。<br>这一剂音律，与你同行万里。',
+  deriveInstruments:['djembe','tabula','bagpipe','panpipe','kalimba','bell'],
+  songId:'fz_huoyan',songName:'火焰之舞',songMain:'djembe',
+  origin:'《火焰之舞》采集西非传统节奏，配以巴西桑巴与爱尔兰风笛，是一场跨越三大洲的鼓乐对话。'
+},
+'颈椎僵硬':{sub:'商音入肺 · 舒筋方',main:'西塔琴《黄昏》七钱 · 商音入肺',aux:'颂钵《颂钵之鸣》三钱 · 溪流一缕',usage:'未时 13-15 时 · 端坐缓动 · 八息一循',
+  pulseDetail:'脉涩而紧，久坐不动，气滞颈肩。宜以商音舒展，配合身体微动，松解经络。',
+  herbDetail:'<b>主药</b>：西塔琴《黄昏》拉格 Yaman，深沉舒展，最宜引导身体松弛。<br><b>辅药</b>：颂钵泛音震颤，配以溪流潺潺，让僵硬部位随之共振。',
+  usageDetail:'未时小肠经当令，宜端坐于椅，背靠椅背，缓慢转动颈部——左三圈，右三圈，仰一次，俯一次，是为一循。',
+  poem:'胸有块垒，借一缕音律松开。<br>身舒则心宁，心宁则万物明。',
+  deriveInstruments:['sitar','bowl','stream','xiao','erhu','wind'],
+  songId:'ts_huanghun',songName:'黄昏拉格',songMain:'sitar',
+  origin:'《黄昏》取材印度 Yaman 调式，原为日落时分的祈祷曲，本版配以颂钵与溪流，最宜午后疏筋。'
+},
+'孤独清冷':{sub:'羽音入肾 · 慰藉方',main:'马头琴《草原长调》七钱 · 羽音入肾',aux:'尺八《虚铎》三钱 · 风吟一缕',usage:'酉时 17-19 时 · 临窗凝望 · 七息一循',
+  pulseDetail:'脉沉而细，肾水不足，心生孤寒。宜以羽音入肾，温润内里。',
+  herbDetail:'<b>主药</b>：蒙古马头琴《草原长调》音色苍凉而温润，最宜慰藉孤独之心。<br><b>辅药</b>：日本尺八《虚铎》以虚空起势，与马头琴共鸣远方。',
+  usageDetail:'酉时肾经当令，宜临窗而坐，凝望远方天色。让音律陪你一同凝视——这便是仪式感。',
+  poem:'山高水长，自有人懂。<br>愿这一缕音律，温柔填满心底的空。',
+  deriveInstruments:['morinhuur','shakuhachi','humai','xiao','wind','bowl'],
+  songId:'mt_caoyuan',songName:'草原长调',songMain:'morinhuur',
+  origin:'《草原长调》乃蒙古传统牧人之歌，本版以马头琴主奏，配以日本尺八应和，跨越草原与禅院。'
+},
+'怅然若失':{sub:'徵音入心 · 慰怀方',main:'琵琶《月夜》七钱 · 徵音入心',aux:'箫《春江花月夜》三钱 · 风铃一缕',usage:'戌时 19-21 时 · 临窗听月 · 六息一循',
+  pulseDetail:'脉浮而散，神思游离。多为人事变迁、感念故旧之相。宜以柔徵音入心，慰问怀念。',
+  herbDetail:'<b>主药</b>：琵琶《月夜》清冷而深情，最能映照故人故事。<br><b>辅药</b>：箫《春江花月夜》以月光为媒，引人怀远。',
+  usageDetail:'戌时宜临窗听月，让音律与月色一同抚平心绪。六息一循，七循约七分钟。',
+  poem:'山月不知心底事，水风空落眼前花。<br>愿这一剂音律，与你共度此夜。',
+  deriveInstruments:['pipa','xiao','bell','guzheng','erhu','bowl'],
+  songId:'pp_yueye',songName:'月夜',songMain:'pipa',
+  origin:'《月夜》以琵琶演绎月下情思，加入洞箫与风铃，使思念有了回声。'
+}
+};
+
+/* AI 智能识别关键词映射 */
+const KEYWORD_MAP=[
+  {kw:['失眠','睡不','辗转','梦','夜不能寐','睡眠'],t:'失眠多梦'},
+  {kw:['焦虑','烦','急','慌','坐立不安','心慌'],t:'焦虑难安'},
+  {kw:['累','倦','颈','腰','肩','僵硬','酸'],t:'颈椎僵硬'},
+  {kw:['闷','郁','块垒','憋','胸口','叹气','胸闷'],t:'胸有块垒'},
+  {kw:['治愈','温暖','疲惫','低落','抑郁','想哭'],t:'求治愈'},
+  {kw:['乘风','振作','拼','加油','奋','上扬'],t:'愿乘风'},
+  {kw:['孤独','一个人','清冷','寂寞','想念','远方'],t:'孤独清冷'},
+  {kw:['怅然','失落','怀念','故人','旧时','物是人非'],t:'怅然若失'},
+  {kw:['案牍','劳形','工作','加班','心绪如麻'],t:'失眠多梦'}
+];
+
+/* ============ 状态 ============ */
+let curScreen=0;
+let pickedTag=null;
+let pickedInst=new Set();
+let pickedDerived=new Set();
+let curPrescription=PRESCRIPTIONS['失眠多梦'];
+let curMoodTag='失眠多梦';
+let userName=localStorage.getItem('yiwei_user')||'';
+let aiMode='auto';
+
+/* ============ 屏切换 ============ */
+function goto(i){
+  curScreen=i;
+  document.getElementById('screens').style.transform=`translateX(-${i*25}%)`;
+  document.querySelectorAll('.tab-item').forEach(el=>{
+    el.classList.toggle('active', +el.dataset.idx===i);
+  });
+}
+
+/* ============ 主题切换 ============ */
+function setTheme(t){
+  document.body.dataset.theme=t;
+  document.querySelectorAll('.tdot').forEach(x=>x.classList.toggle('active', x.dataset.theme===t));
+  localStorage.setItem('yiwei_theme',t);
+}
+document.querySelectorAll('.tdot').forEach(d=>{d.onclick=()=>setTheme(d.dataset.theme);});
+const savedTheme=localStorage.getItem('yiwei_theme');
+if(savedTheme) setTheme(savedTheme);
+
+/* ============ 开方 · 标签选择 ============ */
+function pickTag(el,t){
+  document.querySelectorAll('.tag').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  pickedTag=t;
+}
+
+/* ============ AI 智能分析 ============ */
+function aiAnalyze(){
+  const txt=document.getElementById('moodInput').value.trim();
+  // 识别情绪标签
+  let detectedTag=pickedTag;
+  if(txt && !detectedTag){
+    for(const m of KEYWORD_MAP){
+      if(m.kw.some(k=>txt.includes(k))){detectedTag=m.t;break;}
+    }
+  }
+  if(!detectedTag) detectedTag='失眠多梦';
+  curMoodTag=detectedTag;
+  curPrescription=PRESCRIPTIONS[detectedTag];
+
+  // 打开浮层 · loading
+  const ov=document.getElementById('aiOverlay');
+  ov.classList.add('show');
+  document.getElementById('aiLoading').style.display='flex';
+  document.getElementById('aiResult').classList.remove('show');
+
+  const loadSteps=['正在为你把脉…','拆解情绪成因…','匹配音律谱系…','调和五音五脏…'];
+  let si=0;
+  const timer=setInterval(()=>{
+    si++;
+    if(si<loadSteps.length) document.getElementById('aiLoadingTxt').textContent=loadSteps[si];
+  },420);
+
+  setTimeout(()=>{
+    clearInterval(timer);
+    document.getElementById('aiLoading').style.display='none';
+    renderAiResult(txt,detectedTag);
+    document.getElementById('aiResult').classList.add('show');
+  },1800);
+}
+
+function renderAiResult(txt,tag){
+  const p=PRESCRIPTIONS[tag];
+  // 情绪拆解
+  const emo=txt?`关键词识别 → 「${tag}」<br>原文："${txt}"`:`你选择了「${tag}」标签 · 一种典型的现代情绪图景`;
+  document.getElementById('aiEmotion').innerHTML=emo;
+  // 成因推演（截取脉象详解）
+  document.getElementById('aiCause').innerHTML=p.pulseDetail;
+  // 音律建议
+  document.getElementById('aiAdvice').innerHTML=`推荐 <b style="color:var(--accent)">${p.sub}</b>，主奏 <b style="color:var(--accent)">${p.main.split('七钱')[0]}</b>，配合${p.usage.split('·')[0].trim()}时辰服法效用最佳。`;
+  // 默认智能推送
+  document.getElementById('aiAutoFang').innerHTML=`<b>主药：</b>${p.main}<br><b>辅药：</b>${p.aux}<br><b>服法：</b>${p.usage}`;
+  // 自主选方 · 列出 3 个候选
+  const cands=Object.entries(PRESCRIPTIONS).filter(([k])=>k!==tag).slice(0,3);
+  cands.unshift([tag,p]);
+  const list=document.getElementById('aiCandList');
+  list.innerHTML=cands.map(([k,v],i)=>`
+    <div class="ai-cand${i===0?' picked':''}" data-key="${k}" onclick="pickCand(this,'${k}')">
+      <div class="nm">${v.sub}</div>
+      <div class="ds">${v.main.split('·')[0].trim()} ｜ ${v.usage.split('·')[0].trim()}</div>
+    </div>`).join('');
+  // 重置模式
+  switchMode('auto');
+}
+function switchMode(m){
+  aiMode=m;
+  document.getElementById('modeAuto').classList.toggle('active',m==='auto');
+  document.getElementById('modeManual').classList.toggle('active',m==='manual');
+  document.getElementById('modeAutoPanel').style.display=m==='auto'?'block':'none';
+  document.getElementById('modeManualPanel').style.display=m==='manual'?'block':'none';
+}
+function pickCand(el,key){
+  document.querySelectorAll('.ai-cand').forEach(x=>x.classList.remove('picked'));
+  el.classList.add('picked');
+  curMoodTag=key;
+  curPrescription=PRESCRIPTIONS[key];
+}
+function closeAi(){
+  document.getElementById('aiOverlay').classList.remove('show');
+}
+function confirmFang(){
+  closeAi();
+  applyPrescription();
+  goto(1);
+}
+function applyPrescription(){
+  const p=curPrescription;
+  document.getElementById('fangSub').textContent=p.sub;
+  document.getElementById('fangPulse').textContent=document.getElementById('moodInput').value.trim()||'案牍劳形，心绪如麻';
+  document.getElementById('fangMain').textContent=p.main;
+  document.getElementById('fangAux').textContent=p.aux;
+  document.getElementById('fangUsage').textContent=p.usage;
+  document.getElementById('fangPulseDetail').innerHTML=p.pulseDetail;
+  document.getElementById('fangHerbDetail').innerHTML=p.herbDetail;
+  document.getElementById('fangUsageDetail').innerHTML=p.usageDetail;
+  document.getElementById('fangPoem').innerHTML=p.poem;
+  // 剧场曲名
+  document.getElementById('theatreSong').textContent=p.songName.split('').join(' ');
+  document.getElementById('theatreDesc').textContent=p.sub;
+  document.getElementById('songOrigin').innerHTML=p.origin;
+  // 衍生乐器
+  renderDerived(p.deriveInstruments);
+}
+
+/* ============ 音方笺三段切换 ============ */
+function switchFang(el,sec){
+  document.querySelectorAll('.fang-tabs .ft').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.fang-section').forEach(s=>s.classList.toggle('active',s.dataset.sec===sec));
+}
+
+/* ============ 衍生合音 ============ */
+function renderDerived(ids){
+  pickedDerived=new Set();
+  const grid=document.getElementById('derivedGrid');
+  grid.innerHTML=ids.map(id=>{
+    const i=INSTRUMENTS.find(x=>x.id===id);
+    return `<div class="derived-card" data-id="${id}" onclick="pickDerived(this,'${id}')">
+      <div class="emo">${i.emoji}</div>
+      <div class="nm">${i.name}</div>
+      <div class="fr">${i.from}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('derivedResult').textContent='已选 0 件 · 任选 1-3 件即可合鸣';
+}
+function pickDerived(el,id){
+  if(pickedDerived.has(id)){pickedDerived.delete(id);el.classList.remove('picked');}
+  else if(pickedDerived.size<3){pickedDerived.add(id);el.classList.add('picked');}
+  else{document.getElementById('derivedResult').textContent='已 满 三 件 ， 宜 止';return;}
+  document.getElementById('derivedResult').textContent=`已选 ${pickedDerived.size} 件 · 即可即兴合鸣`;
+}
+function composeDerived(){
+  if(pickedDerived.size<1){document.getElementById('derivedResult').textContent='至少选一件乐器，方可合鸣';return;}
+  document.getElementById('derivedResult').innerHTML='♫ AI 即兴合鸣中…';
+  setTimeout(()=>{
+    const names=[...pickedDerived].map(id=>INSTRUMENTS.find(i=>i.id===id).name).join(' × ');
+    const titles=['月下听潮','空谷传响','一念清凉','江上清风','山间松涛'];
+    const tt=titles[Math.floor(Math.random()*titles.length)];
+    document.getElementById('derivedResult').innerHTML=`✦ 衍生方《${tt}》<br>主药 ＋ ${names}<br><small style="opacity:.65">轻击下方播放</small>`;
+    const all=[curPrescription.songMain,...pickedDerived];
+    playSynth(all,4);
+  },1200);
+}
+
+/* ============ 合音工作台 ============ */
+function renderInst(cat){
+  const grid=document.getElementById('instGrid');
+  const list=cat==='all'?INSTRUMENTS:INSTRUMENTS.filter(i=>i.cat===cat);
+  grid.innerHTML=list.map(i=>`
+    <div class="inst-card${pickedInst.has(i.id)?' picked':''}" data-id="${i.id}" onclick="pickInst(this,'${i.id}')">
+      <span class="preview" onclick="event.stopPropagation();previewInst('${i.id}')">♪</span>
+      <div class="emo">${i.emoji}</div>
+      <div class="nm">${i.name}</div>
+      <div class="fr">${i.from}</div>
+    </div>
+  `).join('');
+}
+function filterCat(el,cat){
+  document.querySelectorAll('.tabs .tb').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  renderInst(cat);
+}
+function pickInst(el,id){
+  if(pickedInst.has(id)){pickedInst.delete(id);el.classList.remove('picked');}
+  else if(pickedInst.size<3){pickedInst.add(id);el.classList.add('picked');}
+  else{document.getElementById('hmResult').textContent='已 满 三 件 ， 宜 止';return;}
+  document.getElementById('hmResult').textContent=`已选 ${pickedInst.size} 件 · 任选 2-3 件即可合鸣`;
+}
+function composeMusic(){
+  if(pickedInst.size<2){document.getElementById('hmResult').textContent='至少选两件乐器，方可合鸣';return;}
+  document.getElementById('hmResult').innerHTML='♫ AI 合鸣中…';
+  setTimeout(()=>{
+    const names=[...pickedInst].map(id=>INSTRUMENTS.find(i=>i.id===id).name).join(' × ');
+    const titles=['江上清风','山间松涛','月下听潮','一念清凉','空谷传响'];
+    const t=titles[Math.floor(Math.random()*titles.length)];
+    document.getElementById('hmResult').innerHTML=`✦ 《${t}》<br>${names}<br><small style="opacity:.6">轻击播放</small>`;
+    playSynth([...pickedInst],4);
+  },1400);
+}
+function previewInst(id){playSynth([id],1.5);}
+
+/* ============ 剧场播放 ============ */
+function playMain(){playSynth([curPrescription.songMain],5);}
+function prevTrack(){}
+function nextTrack(){}
+function quickPlay(id,name,desc){
+  // 从我的页直接快速播放
+  document.getElementById('theatreSong').textContent=name.split('').join(' ');
+  document.getElementById('theatreDesc').textContent=desc;
+  goto(1);
+  switchFang(document.querySelector('[data-sec="theatre"].ft'),'theatre');
+  setTimeout(()=>playSynth(['guqin'],4),300);
+}
+
+/* ============ 频谱条 ============ */
+const spec=document.getElementById('spectrum');
+for(let i=0;i<22;i++){
+  const b=document.createElement('div');b.className='bar';
+  b.style.animationDelay=(Math.random()*1.2)+'s';
+  spec.appendChild(b);
+}
+
+/* ============ AudioRegistry + 合成（沿用 v1.4） ============ */
+class AudioRegistry{
+  constructor(){this.map=new Map();this.cache=new Map();}
+  register(id,url){this.map.set(id,url);}
+  registerBatch(obj){Object.entries(obj).forEach(([k,v])=>this.register(k,v));}
+  has(id){return this.map.has(id);}
+  async load(ctx,id){
+    if(this.cache.has(id)) return this.cache.get(id);
+    if(!this.has(id)) return null;
+    try{const r=await fetch(this.map.get(id));const b=await r.arrayBuffer();const a=await ctx.decodeAudioData(b);this.cache.set(id,a);return a;}
+    catch(e){console.warn('音频加载失败',id,e);return null;}
+  }
+}
+window.AUDIO_REGISTRY=new AudioRegistry();
+
+let audioCtx=null;
+function ensureCtx(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+async function playSynth(ids,dur=4){
+  const ctx=ensureCtx();
+  if(ctx.state==='suspended') await ctx.resume();
+  showStatus('合成音律播放中');
+  const now=ctx.currentTime;
+  for(const id of ids){
+    const inst=INSTRUMENTS.find(i=>i.id===id);
+    if(!inst) continue;
+    if(AUDIO_REGISTRY.has(id)){
+      const buf=await AUDIO_REGISTRY.load(ctx,id);
+      if(buf){const src=ctx.createBufferSource();src.buffer=buf;const g=ctx.createGain();g.gain.value=.5;src.connect(g).connect(ctx.destination);src.start();showStatus('真实音频播放中');continue;}
+    }
+    synthOne(ctx,inst,now,dur);
+  }
+}
+function synthOne(ctx,inst,t0,dur){
+  const f=inst.freq||220;
+  const g=ctx.createGain();g.connect(ctx.destination);
+  g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(.18,t0+.05);
+  g.gain.exponentialRampToValueAtTime(.001,t0+dur);
+  if(inst.type==='pluck'||inst.type==='bell'){
+    const o=ctx.createOscillator();o.type=inst.type==='bell'?'sine':'triangle';o.frequency.value=f;o.connect(g);o.start(t0);o.stop(t0+dur);
+    const o2=ctx.createOscillator();o2.type='sine';o2.frequency.value=f*1.5;
+    const g2=ctx.createGain();g2.gain.value=.08;o2.connect(g2).connect(ctx.destination);o2.start(t0);o2.stop(t0+dur);
+  } else if(inst.type==='wind'||inst.type==='drone'){
+    const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=f;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=f*3;o.connect(lp).connect(g);o.start(t0);o.stop(t0+dur);
+  } else if(inst.type==='drum'){
+    const o=ctx.createOscillator();o.type='sine';o.frequency.value=f;o.connect(g);o.start(t0);o.stop(t0+.6);
+    const buf=ctx.createBuffer(1,ctx.sampleRate*.1,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/3000);
+    const n=ctx.createBufferSource();n.buffer=buf;n.connect(g);n.start(t0);
+  } else if(inst.type==='bow'){
+    const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=f;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=f*4;o.connect(lp).connect(g);o.start(t0);o.stop(t0+dur);
+  } else if(inst.type==='bowl'){
+    [1,2.4,3.7,5.2].forEach((m,i)=>{const o=ctx.createOscillator();o.type='sine';o.frequency.value=f*m;const g2=ctx.createGain();g2.gain.value=.06/(i+1);o.connect(g2).connect(ctx.destination);o.start(t0);o.stop(t0+dur+1);});
+  } else if(inst.type==='noise'||inst.type==='stream'||inst.type==='whoosh'){
+    const buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const n=ctx.createBufferSource();n.buffer=buf;const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=inst.type==='whoosh'?400:800;n.connect(bp).connect(g);n.start(t0);
+  } else if(inst.type==='chime'){
+    [f,f*1.3,f*1.7].forEach((fr,i)=>{const o=ctx.createOscillator();o.type='sine';o.frequency.value=fr;const g2=ctx.createGain();g2.gain.value=.05;g2.gain.exponentialRampToValueAtTime(.001,t0+dur);o.connect(g2).connect(ctx.destination);o.start(t0+i*.15);o.stop(t0+dur);});
+  }
+}
+function showStatus(t){const el=document.getElementById('audioStatus');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);}
+
+/* ============ 我的页 · 登录/用户信息卡 ============ */
+function renderMineCard(){
+  const area=document.getElementById('mineCardArea');
+  if(userName){
+    area.innerHTML=`
+      <div class="mine-card user">
+        <div class="mine-avatar">${userName.slice(0,1)}</div>
+        <div class="mine-info">
+          <div class="nm">${userName}</div>
+          <div class="sl">已开音方 0 帖 · 合鸣作品 0 篇</div>
+        </div>
+        <button class="mine-logout" onclick="logout()">退出</button>
+      </div>`;
+  } else {
+    area.innerHTML=`
+      <div class="mine-card guest">
+        <div class="logo-seal">一味</div>
+        <div class="h-title">入  山</div>
+        <div class="sub">登录后保存你的音方与合鸣作品</div>
+        <div class="login-form">
+          <label>手机号 / 邮箱</label>
+          <input type="text" id="userInput" placeholder="请输入您的账号">
+          <label>密码 / 验证码</label>
+          <input type="password" id="passInput" placeholder="••••••••">
+          <button class="login-btn" onclick="doLogin()">入 山</button>
+          <div class="login-alt"><span>📱 微信</span><span>🍎 Apple</span><span>📧 注册</span></div>
+          <div class="guest-link" onclick="loginAsGuest()">— 暂以游客身份听一曲 —</div>
+        </div>
+      </div>`;
+  }
+}
+function doLogin(){
+  const u=document.getElementById('userInput').value.trim()||'山客';
+  userName=u.length>4?u.slice(0,4):u;
+  localStorage.setItem('yiwei_user',userName);
+  renderMineCard();
+}
+function loginAsGuest(){userName='访客';renderMineCard();}
+function logout(){userName='';localStorage.removeItem('yiwei_user');renderMineCard();}
+
+/* ============ 初始化 ============ */
+renderInst('all');
+renderDerived(curPrescription.deriveInstruments);
+renderMineCard();
+goto(0);  // 默认首页 = 开方
+
+console.log('%c一味 Dose v1.5','font-family:serif;font-size:18px;color:#d4a574','已就绪');
+</script>
+</body>
+</html>
